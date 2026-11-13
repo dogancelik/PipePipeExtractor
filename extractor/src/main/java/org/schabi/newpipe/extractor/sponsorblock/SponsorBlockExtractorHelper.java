@@ -203,7 +203,15 @@ public final class SponsorBlockExtractorHelper {
     public static String getApiUrl(int serviceId) {
         String apiUrl = "https://sponsor.ajay.app/api/";
         if (serviceId == ServiceList.YouTube.getServiceId()) {
-            apiUrl = "https://sponsor.ajay.app/api/";
+            // user-configured server (YouTube only), blank = official
+            final SponsorBlockApiSettings settings =
+                    ServiceList.YouTube.getSponsorBlockApiSettings();
+            if (settings != null && settings.apiUrl != null && !settings.apiUrl.trim().isEmpty()) {
+                apiUrl = settings.apiUrl.trim();
+                if (!apiUrl.endsWith("/")) {
+                    apiUrl += "/";
+                }
+            }
         } else if (serviceId == ServiceList.BiliBili.getServiceId()) {
             apiUrl = "https://bsbsb.top/api/";
         }
